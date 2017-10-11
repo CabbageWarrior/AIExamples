@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIHuman : AIPlayer
+public class Human : AIPlayer
 {
     public override bool GetAction(out Action chosenAction)
     {
