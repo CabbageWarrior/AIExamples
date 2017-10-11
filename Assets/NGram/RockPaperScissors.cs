@@ -31,18 +31,22 @@ public class RockPaperScissors : MonoBehaviour
 
     void Update()
     {
-        Action chosenActionP1 = Action.NONE, chosenActionP2 = Action.NONE;
+        Action p1Action = Action.NONE, p2Action = Action.NONE;
 
         if (nGames < maxGames)
         {
             // You choose
-            if (player1.GetAction(out chosenActionP1) && player2.GetAction(out chosenActionP2))
+            if (player1.GetAction(out p1Action) && player2.GetAction(out p2Action))
             {
-                Debug.Log("P1 chooses: " + chosenActionP1);
-                Debug.Log("P2 chooses: " + chosenActionP2);
+                Debug.Log("P1 chooses: " + p1Action);
+                Debug.Log("P2 chooses: " + p2Action);
+
+                // Inform the AIs of the choices.
+                player1.ReceiveOpponentAction(p2Action);
+                player2.ReceiveOpponentAction(p1Action);
 
                 // Check who wins
-                switch (chosenActionP1 - chosenActionP2)
+                switch (p1Action - p2Action)
                 {
                     case 0:
                         nDraw++;
