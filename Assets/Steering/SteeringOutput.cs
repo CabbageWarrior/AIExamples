@@ -4,7 +4,7 @@ namespace AI.Movement
 {
     public struct SteeringOutput
     {
-        public Vector2 targetLinearVelocity;
-        public float targetAngularVelocity;
+        public Vector2 targetLinearVelocityPercent;
+        //public float targetAngularVelocity;
     }
 }
