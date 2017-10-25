@@ -25,10 +25,11 @@ namespace AI.Pathfinding
             startNode.transform.localScale = Vector3.one * 2;
             endNode.transform.localScale = Vector3.one * 2;
 
-            StartCoroutine(Search(nodes, edges, startNode, endNode));
+            List<Node> bestPath = new List<Node>(); ;
+            StartCoroutine(Search(nodes, edges, startNode, endNode, bestPath));
         }
 
-        private IEnumerator Search(List<Node> nodes, List<Edge> edges, Node startNode, Node endNode)
+        public IEnumerator Search(List<Node> nodes, List<Edge> edges, Node startNode, Node endNode, List<Node> bestPath)
         {
             List<Node> openSet = new List<Node>();
             List<Node> closedSet = new List<Node>();
@@ -40,7 +41,7 @@ namespace AI.Pathfinding
 
             while (openSet.Count > 0)
             {
-                Node n = GetBestNode(openSet);
+                Node n = GetBestNode(openSet, true);
                 openSet.Remove(n);
                 closedSet.Add(n);
 
@@ -71,19 +72,41 @@ namespace AI.Pathfinding
                 }
             }
 
+            // Find best path
+            bestPath.Add(endNode);
+            var currentNode = endNode;
+            while (currentNode != startNode)
+            {
+                // Get the neighbours of the current node
+                List<Node> neighs = graphMaker.GetNeighbours(currentNode);
+
+                // Find the best neighbour
+                Node bestNeigh = GetBestNode(neighs, false);
+
+                Edge e = graphMaker.GetEdge(currentNode, bestNeigh);
+
+                bestPath.Add(bestNeigh);
+                currentNode = bestNeigh;
+
+                bestNeigh.color = Color.cyan;
+                e.color = Color.yellow;
+                yield return new WaitForSeconds(drawDelay);
+            }
+
             yield return null;
         }
 
-        private Node GetBestNode(List<Node> set)
+        private Node GetBestNode(List<Node> set, bool useHeuristic)
         {
             Node bestNode = null;
             float bestTotal = float.MaxValue;
 
             foreach (Node n in set)
             {
-                if (n.cost + n.heutistic < bestTotal)
+                var totalCost = (useHeuristic ? n.cost + n.heutistic : n.cost);
+                if (totalCost < bestTotal)
                 {
-                    bestTotal = n.cost + n.heutistic;
+                    bestTotal = totalCost;
                     bestNode = n;
                 }
             }

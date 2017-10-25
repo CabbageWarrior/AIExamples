@@ -22,7 +22,7 @@ namespace AI.Pathfinding
         }
 
         // A* weights
-        public float cost;
+        public float cost = float.MaxValue;
         public float heutistic;
     }
 }
