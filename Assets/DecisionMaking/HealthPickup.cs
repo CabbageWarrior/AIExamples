@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthPickup : MonoBehaviour
 {
     public float bonusHealth = 5f;
+    public bool isEnabled = true;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
